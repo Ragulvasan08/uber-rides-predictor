@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://kit.fontawesome.com/5f3f547070.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <title>Error - Uber Rides Prediction</title>
+</head>
+<body>
+    <div class="container">
+        <h2 class="container-heading"><span class="heading_font">Uber Rides Predictor</span></h2>
+        <div class="description">
+            <p>A Machine Learning Web App, built with flask</p>
+        </div>
+    </div>
+
+    <div class="ml-container error-container">
+        <div class="error-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h3 class="error-title">Oops! Something went wrong</h3>
+        <p class="error-message">{{ error }}</p>
+        <a href="{{ url_for('home') }}" class="my-cta-button">Go Back Home</a>
+    </div>
+</body>
+</html> 

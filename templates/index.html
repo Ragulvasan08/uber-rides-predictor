@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://kit.fontawesome.com/5f3f547070.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <title>Uber Rides Prediction</title>
+</head>
+<body>
+    <div class="container">
+        <h2 class="container-heading"><span class="heading_font">Uber Rides Predictor</span></h2>
+        <div class="description">
+            <p>A Machine Learning Web App, built with flask</p>
+        </div>
+    </div>
+
+    <div class="ml-container">
+        <form id="predictionForm" action="{{url_for('predict')}}" method="POST">
+            <div class="input-group">
+                <label for="Priceperweek">Price per week ($)</label>
+                <input type="number" 
+                       class="form-input" 
+                       id="Priceperweek"
+                       name="Priceperweek" 
+                       placeholder="e.g., 25" 
+                       step="0.01"
+                       min="0"
+                       required>
+                <small class="input-hint">Enter the weekly price for rides</small>
+            </div>
+
+            <div class="input-group">
+                <label for="Population">Population</label>
+                <input type="number" 
+                       class="form-input" 
+                       id="Population"
+                       name="Population" 
+                       placeholder="e.g., 1800000" 
+                       min="0"
+                       required>
+                <small class="input-hint">Enter the city population</small>
+            </div>
+
+            <div class="input-group">
+                <label for="Monthlyincome">Monthly income ($)</label>
+                <input type="number" 
+                       class="form-input" 
+                       id="Monthlyincome"
+                       name="Monthlyincome" 
+                       placeholder="e.g., 25000" 
+                       step="0.01"
+                       min="0"
+                       required>
+                <small class="input-hint">Enter average monthly income</small>
+            </div>
+
+            <div class="input-group">
+                <label for="Averageparkingpermonth">Average parking per month ($)</label>
+                <input type="number" 
+                       class="form-input" 
+                       id="Averageparkingpermonth"
+                       name="Averageparkingpermonth" 
+                       placeholder="e.g., 96" 
+                       step="0.01"
+                       min="0"
+                       required>
+                <small class="input-hint">Enter average monthly parking cost</small>
+            </div>
+
+            <button type="submit" class="my-cta-button" id="submitBtn">
+                <span class="button-text">Predict</span>
+                <span class="loading-spinner" style="display: none;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </span>
+            </button>
+        </form>
+
+        <!-- Error Message -->
+        {% if error %}
+        <div class="error-message">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>{{ error }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Info Section -->
+        <div class="info-section">
+            <h4><i class="fas fa-info-circle"></i> How it works</h4>
+            <p>This machine learning model predicts the number of weekly rides based on:</p>
+            <ul>
+                <li>Price per week for rides</li>
+                <li>City population</li>
+                <li>Average monthly income</li>
+                <li>Average monthly parking costs</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Prediction Result Modal -->
+    {% if prediction_text %}
+    <div class="modal-overlay" id="predictionModal">
+        <div class="modal-container">
+            <div class="modal-content">
+                <!-- Success Animation -->
+                <div class="success-animation">
+                    <div class="checkmark-circle">
+                        <div class="checkmark"></div>
+                    </div>
+                </div>
+                
+                <!-- Result Header -->
+                <div class="result-header">
+                    <h2 class="result-title">🎯 Prediction Complete!</h2>
+                    <p class="result-subtitle">Your AI-powered analysis is ready</p>
+                </div>
+
+                <!-- Main Result -->
+                <div class="result-main">
+                    <div class="result-icon-large">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="result-number">
+                        <span class="result-label">Weekly Rides</span>
+                        <span class="result-value">{{ prediction_text.split('will be ')[1] }}</span>
+                    </div>
+                </div>
+
+                <!-- Result Details -->
+                <div class="result-details">
+                    <div class="detail-item">
+                        <i class="fas fa-dollar-sign"></i>
+                        <span>Price per week: ${{ request.form.get('Priceperweek', 'N/A') }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-users"></i>
+                        <span>Population: {{ request.form.get('Population', 'N/A') }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>Monthly income: ${{ request.form.get('Monthlyincome', 'N/A') }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-parking"></i>
+                        <span>Parking cost: ${{ request.form.get('Averageparkingpermonth', 'N/A') }}</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="modal-actions">
+                    <button class="btn-secondary" onclick="closeModal()">
+                        <i class="fas fa-times"></i>
+                        Close
+                    </button>
+                    <button class="btn-primary" onclick="newPrediction()">
+                        <i class="fas fa-plus"></i>
+                        New Prediction
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
